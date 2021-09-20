@@ -42,5 +42,15 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<profiles>
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<server.port>8080</server.port>
+			</properties>
+		</profile>
+	</profiles>
 </project>

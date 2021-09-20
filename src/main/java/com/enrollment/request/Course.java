@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
-public class SortRequest {
+public class Course {
 
 	@Getter
 	@Setter
-	private String className;
+	private String courseName;
 
 	@Getter
 	@Setter
@@ -19,12 +19,12 @@ public class SortRequest {
 
 	@Getter
 	@Setter
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm a")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "h:mm a")
 	private LocalTime startTime;
 
 	@Getter
 	@Setter
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm a")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "h:mm a")
 	private LocalTime endTime;
 
 }
