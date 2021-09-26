@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application.yml")
+@TestPropertySource(locations = "classpath:application-test.yml")
 public class SortControllerTest {
 
 	@Value("classpath:full-integration-input.json")
@@ -47,7 +47,7 @@ public class SortControllerTest {
 			outputCoursesFromFile = mapper.readValue(outputResourceFile.getFile(),
 					new TypeReference<ArrayList<Schedule>>(){});
 		}
-		assertIterableEquals(processedSchedules, outputCoursesFromFile);
+		assertIterableEquals(outputCoursesFromFile, processedSchedules);
 	}
 
 }
