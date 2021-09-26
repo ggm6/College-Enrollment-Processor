@@ -3,6 +3,10 @@ package com.enrollment.request;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,11 +24,15 @@ public class Course implements Comparable<Course> {
 	@Getter
 	@Setter
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "h:mm a")
+	@JsonSerialize(using = LocalTimeSerializer.class)
+	@JsonDeserialize(using = LocalTimeDeserializer.class)
 	private LocalTime startTime;
 
 	@Getter
 	@Setter
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "h:mm a")
+	@JsonSerialize(using = LocalTimeSerializer.class)
+	@JsonDeserialize(using = LocalTimeDeserializer.class)
 	private LocalTime endTime;
 
 	@Override
@@ -48,8 +56,8 @@ public class Course implements Comparable<Course> {
 			return false;
 
 		Course course = (Course) o;
-		if (course.getCourseName().equals(courseName) && course.getStartTime().equals(startTime)
-				&& course.getEndTime().equals(endTime) && course.getProfessor().equals(professor))
+		if (course.getCourseName().equals(courseName) && course.getStartTime().compareTo(startTime) == 0		
+				&& course.getEndTime().compareTo(endTime) == 0 && course.getProfessor().equals(professor))
 			return true;
 
 		return false;

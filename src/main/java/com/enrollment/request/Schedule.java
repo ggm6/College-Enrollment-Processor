@@ -69,4 +69,21 @@ public class Schedule {
 
 		return true;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+
+		if (!(o instanceof Schedule))
+			return false;
+
+		Schedule schedule = (Schedule) o;
+		for (int i = 0; i < courses.size(); ++i) {
+			if ( !courses.get(i).equals(schedule.getCourses().get(i)) )
+				return false;
+		}
+		
+		return true;
+	}
 }
