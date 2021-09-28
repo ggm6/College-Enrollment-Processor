@@ -3,6 +3,7 @@ package com.enrollment.request;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
@@ -15,7 +16,8 @@ public class Course implements Comparable<Course> {
 
 	@Getter
 	@Setter
-	private String courseName;
+	@JsonProperty("courseName")
+	private String name;
 
 	@Getter
 	@Setter
@@ -56,7 +58,7 @@ public class Course implements Comparable<Course> {
 			return false;
 
 		Course course = (Course) o;
-		if (course.getCourseName().equals(courseName) && course.getStartTime().compareTo(startTime) == 0		
+		if (course.getName().equals(name) && course.getStartTime().compareTo(startTime) == 0		
 				&& course.getEndTime().compareTo(endTime) == 0 && course.getProfessor().equals(professor))
 			return true;
 

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,9 +20,7 @@ public class SortController {
 	@PostMapping(value = "/sort")
 	public ArrayList<Schedule> processScheduleSortingRequest(@RequestBody List<Course> courses) {
 		ArrayList<Schedule> allPossibleSchedules = getAllPossibleSchedules(courses);
-		HashSet<String> courseNames = new HashSet<String>(
-				courses.stream().map(Course::getCourseName).collect(Collectors.toList()));
-		removeSchedulesWithDuplicateCourseNames(allPossibleSchedules, courseNames);
+		removeSchedulesWithDuplicateCourseNames(allPossibleSchedules);
 		resolveTimeConflictsInSchedules(allPossibleSchedules);
 		removeDuplicateSchedules(allPossibleSchedules);
 		orderSchedules(allPossibleSchedules);
@@ -81,17 +78,17 @@ public class SortController {
 		return result;
 	}
 
-	private void removeSchedulesWithDuplicateCourseNames(ArrayList<Schedule> allPossibleSchedules,
-			final HashSet<String> distinctCourseNames) {
+	public void removeSchedulesWithDuplicateCourseNames(ArrayList<Schedule> allPossibleSchedules) {
 		Iterator<Schedule> iter = allPossibleSchedules.iterator();
 		while (iter.hasNext()) {
 			Schedule schedule = iter.next();
-			if (distinctCourseNames.size() < schedule.getCourses().size())
+			HashSet<String> distinctCourseNames = schedule.getDistinctCourseNames();
+			if ( schedule.getCourses().size() != distinctCourseNames.size() )
 				iter.remove();
 		}
 	}
 
-	private void resolveTimeConflictsInSchedules(ArrayList<Schedule> allPossibleSchedules) {
+	public void resolveTimeConflictsInSchedules(ArrayList<Schedule> allPossibleSchedules) {
 		for (Schedule schedule : allPossibleSchedules) {
 			ListIterator<Course> iter = schedule.getCourses().listIterator(0);
 			while (iter.hasNext()) {
@@ -109,7 +106,7 @@ public class SortController {
 		}
 	}
 
-	private void removeDuplicateSchedules(ArrayList<Schedule> allPossibleSchedules) {
+	public void removeDuplicateSchedules(ArrayList<Schedule> allPossibleSchedules) {
 		ListIterator<Schedule> iter = allPossibleSchedules.listIterator(0);
 		while (iter.hasNext()) {
 			Schedule schedule1 = iter.next();

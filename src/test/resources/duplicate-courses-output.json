@@ -1,0 +1,18 @@
+[
+    {
+        "courses": [
+            {
+                "courseName": "class1",
+                "professor": "prof1",
+                "startTime": "9:30 AM",
+                "endTime": "11:30 AM"
+            },
+            {
+                "courseName": "class2",
+                "professor": "prof2",
+                "startTime": "1:00 AM",
+                "endTime": "3:00 PM"
+            }
+        ]
+    }
+]

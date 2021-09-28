@@ -2,9 +2,13 @@ package com.enrollment.request;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.ListIterator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Schedule {
+	
 	private ArrayList<Course> courses;
 
 	public Schedule() {
@@ -31,10 +35,10 @@ public class Schedule {
 		courses.remove(index);
 	}
 
-	public int findThisCourse(String comparisonCourse) {
+	public int findCoursePositionByName(String courseName) {
 		for (int coursePos = 0; coursePos < courses.size(); ++coursePos) {
-			String course = courses.get(coursePos).getCourseName();
-			if (course.equals(comparisonCourse))
+			String course = courses.get(coursePos).getName();
+			if (course.equals(courseName))
 				return coursePos;
 		}
 		return -1;
@@ -68,6 +72,15 @@ public class Schedule {
 		}
 
 		return true;
+	}
+	
+	@JsonIgnore
+	public HashSet<String> getDistinctCourseNames() {
+		HashSet<String> courseNames = new HashSet<String>();
+		for (Course course : courses)
+			courseNames.add(course.getName());
+
+		return courseNames;
 	}
 	
 	@Override
