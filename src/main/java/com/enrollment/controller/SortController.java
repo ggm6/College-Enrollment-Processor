@@ -1,6 +1,7 @@
 package com.enrollment.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -19,49 +20,52 @@ public class SortController {
 
 	@PostMapping(value = "/sort")
 	public ArrayList<Schedule> processScheduleSortingRequest(@RequestBody List<Course> courses) {
-		ArrayList<Schedule> allPossibleSchedules = getAllPossibleSchedules(courses);
+		ArrayList<Schedule> allPossibleSchedules = getAllSchedulePermutations(courses);
 		removeSchedulesWithDuplicateCourseNames(allPossibleSchedules);
-		resolveTimeConflictsInSchedules(allPossibleSchedules);
-		removeDuplicateSchedules(allPossibleSchedules);
+		removeSchedulesWithTimeConflicts(allPossibleSchedules);
 		orderSchedules(allPossibleSchedules);
 		return allPossibleSchedules;
 	}
-
+	
 	/*
 	 * Following code adapted from:
 	 * https://stackoverflow.com/questions/29910312/algorithm-to-get-all-the-
 	 * combinations-of-size-n-from-an-array-java by answerer: Alex Salauyou
 	 */
-	public ArrayList<Schedule> getAllPossibleSchedules(final List<Course> courses) {
+	public ArrayList<Schedule> getAllSchedulePermutations(final List<Course> courses) {
 
 		ArrayList<Schedule> allPossibleSchedules = new ArrayList<Schedule>();
 
-		// Accommodates variable number of classes in a schedule
-		int[] sequenceLengths = IntStream.range(1, courses.size() + 1).toArray();
+		// Accommodates variable number of classes in a schedule (if, say, 4 courses are chosen, schedule lengths may be anywhere from 1 to 4 classes long)
+		int[] scheduleLengths = IntStream.range(1, courses.size() + 1).toArray();
 
-		for (int sequenceLength : sequenceLengths) {
-			int[] courseIndices = new int[sequenceLength];
-
+		for (int scheduleLength : scheduleLengths) {
+			
+			int[] courseIndices = new int[scheduleLength];
+			
 			// first index sequence: 0, 1, 2, ...
-			for (int i = 0; (courseIndices[i] = i) < sequenceLength - 1; i++)
-				;
-			Schedule schedule = getScheduleByIndexSequence(courses, courseIndices);
-			allPossibleSchedules.add(schedule);
+			if (scheduleLength == 1) {
+				for (int i = 0; (courseIndices[i] = i) < scheduleLength - 1; i++)
+					;
+				Schedule schedule = getScheduleByIndexSequence(courses, courseIndices);
+				allPossibleSchedules.add(schedule);
+			}
 
 			for (;;) {
 				int i;
 				// find position of item that can be incremented
-				for (i = sequenceLength - 1; i >= 0 && courseIndices[i] == courses.size() - sequenceLength + i; i--)
+				for (i = scheduleLength - 1; i >= 0 && courseIndices[i] == courses.size() - scheduleLength + i; i--)
 					;
 				if (i < 0)
 					break;
 
 				courseIndices[i]++; // increment this item
-				for (++i; i < sequenceLength; i++) // fill up remaining items
+				for (++i; i < scheduleLength; i++) // fill up remaining items
 					courseIndices[i] = courseIndices[i - 1] + 1;
 
-				schedule = getScheduleByIndexSequence(courses, courseIndices);
-				allPossibleSchedules.add(schedule);
+				Schedule schedule = getScheduleByIndexSequence(courses, courseIndices);
+				if ( !allPossibleSchedules.contains(schedule) )
+					allPossibleSchedules.add(schedule);
 			}
 		}
 
@@ -88,42 +92,19 @@ public class SortController {
 		}
 	}
 
-	public void resolveTimeConflictsInSchedules(ArrayList<Schedule> allPossibleSchedules) {
-		for (Schedule schedule : allPossibleSchedules) {
-			ListIterator<Course> iter = schedule.getCourses().listIterator(0);
+	public void removeSchedulesWithTimeConflicts(ArrayList<Schedule> allPossibleSchedules) {
+		ListIterator<Schedule> iter = allPossibleSchedules.listIterator();
+			Schedule schedule = iter.next();
 			while (iter.hasNext()) {
-				Course course1 = iter.next();
-				ListIterator<Course> iter2 = schedule.getCourses().listIterator(iter.nextIndex());
-				while (iter2.hasNext()) {
-					Course course2 = iter2.next();
-					if (course2.overlaps(course1)) {
-						iter2.remove();
-						iter = schedule.getCourses().listIterator(iter.nextIndex() - 1);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	public void removeDuplicateSchedules(ArrayList<Schedule> allPossibleSchedules) {
-		ListIterator<Schedule> iter = allPossibleSchedules.listIterator(0);
-		while (iter.hasNext()) {
-			Schedule schedule1 = iter.next();
-			ListIterator<Schedule> iter2 = allPossibleSchedules.listIterator(iter.nextIndex());
-			while (iter2.hasNext()) {
-				Schedule schedule2 = iter2.next();
-				if (schedule2.isDuplicateOf(schedule1)) {
-					iter2.remove();
-					iter = allPossibleSchedules.listIterator(iter.nextIndex() - 1);
-					break;
-				}
-			}
+			if ( schedule.containsCourseOverlaps() )
+				iter.remove();
 		}
 	}
 
 	private void orderSchedules(ArrayList<Schedule> allPossibleSchedules) {
 		for (Schedule schedule : allPossibleSchedules)
 			schedule.orderByStartTimeAscending();
+		
+		Collections.sort(allPossibleSchedules);
 	}
 }

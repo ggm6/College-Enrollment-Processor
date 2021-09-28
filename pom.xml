@@ -14,7 +14,7 @@
 	<name>College-Enrollment-Processor</name>
 	<description>College Enrollment Processor move to Spring Boot</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

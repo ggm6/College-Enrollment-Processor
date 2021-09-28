@@ -7,7 +7,7 @@ import java.util.ListIterator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Schedule {
+public class Schedule implements Comparable<Schedule> {
 	
 	private ArrayList<Course> courses;
 
@@ -35,43 +35,23 @@ public class Schedule {
 		courses.remove(index);
 	}
 
-	public int findCoursePositionByName(String courseName) {
-		for (int coursePos = 0; coursePos < courses.size(); ++coursePos) {
-			String course = courses.get(coursePos).getName();
-			if (course.equals(courseName))
-				return coursePos;
-		}
-		return -1;
-	}
-
 	public void orderByStartTimeAscending() {
 		Collections.sort(courses);
 	}
-
-	public void removeHereIfAnyTimeConflicts(ListIterator<Course> iter) {
-		if (!iter.hasPrevious())
-			return;
-
-		Course course = iter.previous();
-		for (int comparisonCoursePos = 0; comparisonCoursePos < courses.size(); ++comparisonCoursePos) {
-			Course comparisonCourse = courses.get(comparisonCoursePos);
-			if (course.overlaps(comparisonCourse)) {
-				iter.remove();
-				break;
+	
+	public boolean containsCourseOverlaps() {
+		ListIterator<Course> iter = courses.listIterator(0);
+		while (iter.hasNext()) {
+			Course course1 = iter.next();
+			ListIterator<Course> iter2 = courses.listIterator(iter.nextIndex());
+			while (iter2.hasNext()) {
+				Course course2 = iter2.next();
+				if (course2.overlaps(course1))
+					return true;
 			}
 		}
-	}
-
-	public boolean isDuplicateOf(Schedule schedule) {
-		for (Course thisCourse : courses) {
-			for (Course course : schedule.getCourses()) {
-				if (!course.equals(thisCourse))
-					return false;
-
-			}
-		}
-
-		return true;
+		
+		return false;
 	}
 	
 	@JsonIgnore
@@ -90,13 +70,27 @@ public class Schedule {
 
 		if (!(o instanceof Schedule))
 			return false;
-
+		
 		Schedule schedule = (Schedule) o;
+		if (courses.size() != schedule.getCourses().size())
+			return false;
+		
 		for (int i = 0; i < courses.size(); ++i) {
 			if ( !courses.get(i).equals(schedule.getCourses().get(i)) )
 				return false;
 		}
 		
 		return true;
+	}
+
+	@Override
+	public int compareTo(Schedule schedule) {
+		if (courses == null || schedule.getCourses() == null || schedule.getCourses().size() == courses.size())
+			return 0;
+		
+		if (schedule.getCourses().size() > courses.size())
+			return 1;
+		
+		return -1;
 	}
 }

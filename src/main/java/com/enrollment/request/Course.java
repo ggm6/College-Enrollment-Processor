@@ -4,6 +4,7 @@ import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
@@ -12,6 +13,12 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
+@JsonPropertyOrder({
+	"name",
+	"professor",
+	"startTime",
+	"endTime"
+})
 public class Course implements Comparable<Course> {
 
 	@Getter

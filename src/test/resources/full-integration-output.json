@@ -2,152 +2,88 @@
     {
         "courses": [
             {
-                "courseName": "class1",
                 "professor": "prof1",
                 "startTime": "9:30 AM",
-                "endTime": "11:30 AM"
+                "endTime": "11:30 AM",
+                "courseName": "class1"
+            },
+            {
+                "professor": "prof4",
+                "startTime": "3:00 PM",
+                "endTime": "9:00 PM",
+                "courseName": "class4"
             }
         ]
     },
     {
         "courses": [
             {
-                "courseName": "class2",
                 "professor": "prof2",
                 "startTime": "11:00 AM",
-                "endTime": "1:00 PM"
+                "endTime": "1:00 PM",
+                "courseName": "class2"
+            },
+            {
+                "professor": "prof4",
+                "startTime": "3:00 PM",
+                "endTime": "9:00 PM",
+                "courseName": "class4"
             }
         ]
     },
     {
         "courses": [
             {
-                "courseName": "class3",
                 "professor": "prof3",
                 "startTime": "9:45 AM",
-                "endTime": "11:45 AM"
-            }
-        ]
-    },
-    {
-        "courses": [
+                "endTime": "11:45 AM",
+                "courseName": "class3"
+            },
             {
-                "courseName": "class4",
                 "professor": "prof4",
                 "startTime": "3:00 PM",
-                "endTime": "9:00 PM"
+                "endTime": "9:00 PM",
+                "courseName": "class4"
             }
         ]
     },
     {
         "courses": [
             {
-                "courseName": "class1",
                 "professor": "prof1",
                 "startTime": "9:30 AM",
-                "endTime": "11:30 AM"
-            },
-            {
-                "courseName": "class4",
-                "professor": "prof4",
-                "startTime": "3:00 PM",
-                "endTime": "9:00 PM"
+                "endTime": "11:30 AM",
+                "courseName": "class1"
             }
         ]
     },
     {
         "courses": [
             {
-                "courseName": "class2",
                 "professor": "prof2",
                 "startTime": "11:00 AM",
-                "endTime": "1:00 PM"
-            },
-            {
-                "courseName": "class4",
-                "professor": "prof4",
-                "startTime": "3:00 PM",
-                "endTime": "9:00 PM"
+                "endTime": "1:00 PM",
+                "courseName": "class2"
             }
         ]
     },
     {
         "courses": [
             {
-                "courseName": "class3",
                 "professor": "prof3",
                 "startTime": "9:45 AM",
-                "endTime": "11:45 AM"
-            },
-            {
-                "courseName": "class4",
-                "professor": "prof4",
-                "startTime": "3:00 PM",
-                "endTime": "9:00 PM"
+                "endTime": "11:45 AM",
+                "courseName": "class3"
             }
         ]
     },
     {
         "courses": [
             {
-                "courseName": "class1",
-                "professor": "prof1",
-                "startTime": "9:30 AM",
-                "endTime": "11:30 AM"
-            },
-            {
-                "courseName": "class4",
                 "professor": "prof4",
                 "startTime": "3:00 PM",
-                "endTime": "9:00 PM"
-            }
-        ]
-    },
-    {
-        "courses": [
-            {
-                "courseName": "class1",
-                "professor": "prof1",
-                "startTime": "9:30 AM",
-                "endTime": "11:30 AM"
-            },
-            {
-                "courseName": "class4",
-                "professor": "prof4",
-                "startTime": "3:00 PM",
-                "endTime": "9:00 PM"
-            }
-        ]
-    },
-    {
-        "courses": [
-            {
-                "courseName": "class2",
-                "professor": "prof2",
-                "startTime": "11:00 AM",
-                "endTime": "1:00 PM"
-            },
-            {
-                "courseName": "class4",
-                "professor": "prof4",
-                "startTime": "3:00 PM",
-                "endTime": "9:00 PM"
-            }
-        ]
-    },
-    {
-        "courses": [
-            {
-                "courseName": "class1",
-                "professor": "prof1",
-                "startTime": "9:30 AM",
-                "endTime": "11:30 AM"
-            },
-            {
-                "courseName": "class4",
-                "professor": "prof4",
-                "startTime": "3:00 PM",
-                "endTime": "9:00 PM"
+                "endTime": "9:00 PM",
+                "courseName": "class4"
             }
         ]
     }
