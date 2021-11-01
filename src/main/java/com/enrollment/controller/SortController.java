@@ -93,11 +93,11 @@ public class SortController {
 	}
 
 	public void removeSchedulesWithTimeConflicts(ArrayList<Schedule> allPossibleSchedules) {
-		ListIterator<Schedule> iter = allPossibleSchedules.listIterator();
-			Schedule schedule = iter.next();
+		ListIterator<Schedule> iter = allPossibleSchedules.listIterator();	
 			while (iter.hasNext()) {
-			if ( schedule.containsCourseOverlaps() )
-				iter.remove();
+				Schedule schedule = iter.next();
+				if ( schedule.containsCourseOverlaps() )
+					iter.remove();
 		}
 	}
 
