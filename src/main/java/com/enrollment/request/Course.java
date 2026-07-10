@@ -1,8 +1,11 @@
 package com.enrollment.request;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -23,7 +26,6 @@ public class Course implements Comparable<Course> {
 
 	@Getter
 	@Setter
-	@JsonProperty("courseName")
 	private String name;
 
 	@Getter
@@ -32,28 +34,57 @@ public class Course implements Comparable<Course> {
 
 	@Getter
 	@Setter
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "h:mm a")
-	@JsonSerialize(using = LocalTimeSerializer.class)
-	@JsonDeserialize(using = LocalTimeDeserializer.class)
 	private LocalTime startTime;
 
 	@Getter
 	@Setter
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "h:mm a")
-	@JsonSerialize(using = LocalTimeSerializer.class)
-	@JsonDeserialize(using = LocalTimeDeserializer.class)
 	private LocalTime endTime;
+	
+	@JsonIgnore
+	@Getter
+	private int startTimeInt;
+	
+	@JsonIgnore
+	@Getter
+	private int endTimeInt;
+
+	@JsonCreator
+	public Course(
+			@JsonProperty("courseName")
+			String courseName,
+			@JsonProperty("professor")
+			String professor,
+			@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "h:mm a")
+			@JsonSerialize(using = LocalTimeSerializer.class)
+			@JsonDeserialize(using = LocalTimeDeserializer.class)
+			@JsonProperty("startTime")
+			LocalTime startTime,
+			@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "h:mm a")
+			@JsonSerialize(using = LocalTimeSerializer.class)
+			@JsonDeserialize(using = LocalTimeDeserializer.class)
+			@JsonProperty("endTime")
+			LocalTime endTime) {
+		super();
+		this.name = courseName;
+		this.professor = professor;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		startTimeInt = startTime.toSecondOfDay();
+		endTimeInt = endTime.toSecondOfDay();
+	}
 
 	@Override
 	public int compareTo(Course course) {
-		if (startTime == null || course.getStartTime() == null)
-			return 0;
-
-		return course.getStartTime().compareTo(course.getStartTime());
+		return Integer.compare(startTimeInt, course.getStartTimeInt());
 	}
 
 	public boolean overlaps(Course course) {
-		return startTime.isBefore(course.getEndTime()) && course.getStartTime().isBefore(endTime);
+		return startTimeInt < course.getEndTimeInt() && course.getStartTimeInt() < endTimeInt;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, professor, startTimeInt, endTimeInt);
 	}
 
 	@Override
@@ -65,8 +96,8 @@ public class Course implements Comparable<Course> {
 			return false;
 
 		Course course = (Course) o;
-		if (course.getName().equals(name) && course.getStartTime().compareTo(startTime) == 0		
-				&& course.getEndTime().compareTo(endTime) == 0 && course.getProfessor().equals(professor))
+		if (course.getName().equals(name) && Integer.compare(startTimeInt, course.getStartTimeInt()) == 0		
+				&& Integer.compare(endTimeInt, course.getEndTimeInt()) == 0 && course.getProfessor().equals(professor))
 			return true;
 
 		return false;
