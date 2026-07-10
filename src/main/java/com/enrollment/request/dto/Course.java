@@ -56,6 +56,10 @@ public class Course implements Comparable<Course> {
 	@JsonIgnore
 	@Getter
 	private int endTimeInt;
+	
+	@JsonIgnore
+	@Getter
+	private int startDayInt;
 
 	@JsonCreator
 	public Course(
@@ -84,10 +88,14 @@ public class Course implements Comparable<Course> {
 		this.days = days;
 		startTimeInt = startTime.toSecondOfDay();
 		endTimeInt = endTime.toSecondOfDay();
+		startDayInt = days.stream().min(DayOfWeek::compareTo).orElse(DayOfWeek.SUNDAY).getValue();
 	}
 
 	@Override
 	public int compareTo(Course course) {
+		if (Integer.compare(startDayInt, course.getStartDayInt()) != 0)
+			return Integer.compare(startDayInt, course.getStartDayInt());
+		
 		return Integer.compare(startTimeInt, course.getStartTimeInt());
 	}
 
