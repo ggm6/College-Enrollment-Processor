@@ -1,4 +1,4 @@
-package com.enrollment.request;
+package com.enrollment.request.dto;
 
 import java.time.LocalTime;
 import java.util.Objects;

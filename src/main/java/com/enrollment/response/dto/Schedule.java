@@ -1,7 +1,9 @@
-package com.enrollment.request;
+package com.enrollment.response.dto;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import com.enrollment.request.dto.Course;
 
 public class Schedule {
 	

@@ -12,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.TestPropertySource;
 
-import com.enrollment.request.Course;
-import com.enrollment.request.Schedule;
+import com.enrollment.request.dto.Course;
+import com.enrollment.response.dto.Schedule;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

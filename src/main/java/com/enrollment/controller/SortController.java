@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.enrollment.request.Course;
-import com.enrollment.request.Schedule;
+import com.enrollment.request.dto.Course;
+import com.enrollment.response.dto.Schedule;
 
 @RestController
 public class SortController {
