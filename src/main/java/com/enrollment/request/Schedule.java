@@ -2,12 +2,8 @@ package com.enrollment.request;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.ListIterator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-public class Schedule implements Comparable<Schedule> {
+public class Schedule {
 	
 	private ArrayList<Course> courses;
 
@@ -38,31 +34,7 @@ public class Schedule implements Comparable<Schedule> {
 	public void orderByStartTimeAscending() {
 		Collections.sort(courses);
 	}
-	
-	public boolean containsCourseOverlaps() {
-		ListIterator<Course> iter = courses.listIterator(0);
-		while (iter.hasNext()) {
-			Course course1 = iter.next();
-			ListIterator<Course> iter2 = courses.listIterator(iter.nextIndex());
-			while (iter2.hasNext()) {
-				Course course2 = iter2.next();
-				if (course2.overlaps(course1))
-					return true;
-			}
-		}
 		
-		return false;
-	}
-	
-	@JsonIgnore
-	public HashSet<String> getDistinctCourseNames() {
-		HashSet<String> courseNames = new HashSet<String>();
-		for (Course course : courses)
-			courseNames.add(course.getName());
-
-		return courseNames;
-	}
-	
 	@Override
 	public boolean equals(Object o) {
 		if (o == this)
@@ -81,16 +53,5 @@ public class Schedule implements Comparable<Schedule> {
 		}
 		
 		return true;
-	}
-
-	@Override
-	public int compareTo(Schedule schedule) {
-		if (courses == null || schedule.getCourses() == null || schedule.getCourses().size() == courses.size())
-			return 0;
-		
-		if (schedule.getCourses().size() > courses.size())
-			return 1;
-		
-		return -1;
 	}
 }
