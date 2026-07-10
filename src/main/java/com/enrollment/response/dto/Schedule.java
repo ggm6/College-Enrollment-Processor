@@ -33,8 +33,12 @@ public class Schedule {
 		courses.remove(index);
 	}
 
-	public void orderByStartTimeAscending() {
+	public void orderByDaysAndStartTimeAscending() {
 		Collections.sort(courses);
+	}
+	
+	public boolean containsSameCourseNameOrTimeOverlap(Course courseToAdd) {
+		return courses.stream().anyMatch(c -> c.getName().equals(courseToAdd.getName()) || c.overlaps(courseToAdd));
 	}
 		
 	@Override

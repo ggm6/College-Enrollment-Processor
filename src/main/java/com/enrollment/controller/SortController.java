@@ -22,7 +22,7 @@ public class SortController {
 	public List<Schedule> processScheduleSortingRequest(@RequestBody List<Course> courses,
 			@RequestParam(name="onlyReturnSchedulesWithMostPossibleClasses", defaultValue = "true") Boolean onlyReturnSchedulesWithMostPossibleClasses) {
 		Set<Schedule> allPossibleSchedules = getAllSchedulePermutations(courses, onlyReturnSchedulesWithMostPossibleClasses);
-		return orderSchedules(allPossibleSchedules);
+		return orderSchedules(allPossibleSchedules,  Boolean.FALSE.equals(onlyReturnSchedulesWithMostPossibleClasses));
 	}
 	
 	/*
@@ -73,26 +73,25 @@ public class SortController {
 	}
 
 	private void addScheduleByIndexSequence(Set<Schedule> allPossibleSchedules, final List<Course> courses, int[] courseIndices) {	
-		Schedule result = new Schedule();
+		Schedule newPossibleSchedule = new Schedule();
 		for (int pos = 0; pos < courseIndices.length; ++pos) {			
 			int index = courseIndices[pos];
 			Course course = courses.get(index);
 			
-			if ( scheduleHasDuplicateCourseNameOrTimeOverlap(result, course) )
+			if ( newPossibleSchedule.containsSameCourseNameOrTimeOverlap(course) )
 				return;
 			
-			result.addCourseAt(pos, course);
+			newPossibleSchedule.addCourseAt(pos, course);
 		}
-		allPossibleSchedules.add(result);
-	}
-	
-	private boolean scheduleHasDuplicateCourseNameOrTimeOverlap(Schedule schedule, Course courseToAdd) {
-		return schedule.getCourses().stream().anyMatch(c -> c.getName().equals(courseToAdd.getName()) || c.overlaps(courseToAdd));
+		allPossibleSchedules.add(newPossibleSchedule);
 	}
 
-	private List<Schedule> orderSchedules(Collection<Schedule> allPossibleSchedules) {
+	private List<Schedule> orderSchedules(Collection<Schedule> allPossibleSchedules, boolean orderSchedulesBySizeDesc) {
 		for (Schedule schedule : allPossibleSchedules)
-			schedule.orderByStartTimeAscending();
+			schedule.orderByDaysAndStartTimeAscending();
+		
+		if (!orderSchedulesBySizeDesc)
+			return allPossibleSchedules.stream().collect(Collectors.toList());
 		
 		return allPossibleSchedules.stream()
 				.sorted(Comparator.comparingInt((Schedule s) -> s.getCourses().size()).reversed())
