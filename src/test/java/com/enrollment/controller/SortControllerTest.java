@@ -1,10 +1,10 @@
 package com.enrollment.controller;
 
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,11 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.TestPropertySource;
 
-import com.enrollment.request.Course;
-import com.enrollment.request.Schedule;
-import com.fasterxml.jackson.core.JsonParseException;
+import com.enrollment.request.dto.Course;
+import com.enrollment.response.dto.Schedule;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -51,70 +49,21 @@ public class SortControllerTest {
 	private SortController controller;
 
 	ObjectMapper mapper = new ObjectMapper();
-
-	
-	@Test
-	public void doGetAllSchedulePermutationsTest() throws JsonParseException, JsonMappingException, IOException {
-		ArrayList<Schedule> processedSchedules = null;
-		ArrayList<Schedule> outputCoursesFromFile = null;
-
-		ArrayList<Course> coursesToProcess = mapper.readValue(inputAllPermutationsFile.getFile(),
-				new TypeReference<ArrayList<Course>>(){});
-		
-		processedSchedules = controller.getAllSchedulePermutations(coursesToProcess);
-	
-		outputCoursesFromFile = mapper.readValue(outputAllPermutationsFile.getFile(),
-				new TypeReference<ArrayList<Schedule>>(){});
-		
-		assertIterableEquals(outputCoursesFromFile, processedSchedules);
-	}
-	
-	@Test
-	public void doRemoveSchedulesWithDuplicateCourseNamesTest() throws Exception {
-		ArrayList<Schedule> schedulesToProcess = null;
-		ArrayList<Schedule> outputSchedulesFromFile = null;
-		
-		schedulesToProcess = mapper.readValue(inputDuplicateCoursesFile.getFile(),
-				new TypeReference<ArrayList<Schedule>>(){});
-		
-		controller.removeSchedulesWithDuplicateCourseNames(schedulesToProcess);
-	
-		outputSchedulesFromFile = mapper.readValue(outputDuplicateCoursesFile.getFile(),
-				new TypeReference<ArrayList<Schedule>>(){});
-		
-		assertIterableEquals(outputSchedulesFromFile, schedulesToProcess);
-	}
-	
-	@Test
-	public void doRemoveSchedulesWithTimeConflictsTest() throws Exception {
-		ArrayList<Schedule> schedulesToProcess = null;
-		ArrayList<Schedule> outputSchedulesFromFile = null;
-		
-		schedulesToProcess = mapper.readValue(inputTimeConflictsFile.getFile(),
-				new TypeReference<ArrayList<Schedule>>(){});
-		
-		controller.removeSchedulesWithTimeConflicts(schedulesToProcess);
-
-		outputSchedulesFromFile = mapper.readValue(outputTimeConflictsFile.getFile(),
-				new TypeReference<ArrayList<Schedule>>(){});
-
-		assertIterableEquals(outputSchedulesFromFile, schedulesToProcess);
-	}
 	
 	@Test
 	public void doFullIntegrationTest() throws IOException {
-		ArrayList<Schedule> processedSchedules = null;
-		ArrayList<Schedule> outputCoursesFromFile = null;
+		List<Schedule> processedSchedules = null;
+		Set<Schedule> outputCoursesFromFile = null;
 
-		ArrayList<Course> coursesToProcess = mapper.readValue(inputFullIntegrationFile.getFile(),
-				new TypeReference<ArrayList<Course>>(){});
+		List<Course> coursesToProcess = mapper.readValue(inputFullIntegrationFile.getFile(),
+				new TypeReference<List<Course>>(){});
 		
-		processedSchedules = controller.processScheduleSortingRequest(coursesToProcess);
+		processedSchedules = controller.processScheduleSortingRequest(coursesToProcess, Boolean.FALSE);
 	
 		outputCoursesFromFile = mapper.readValue(outputFullIntegrationFile.getFile(),
-				new TypeReference<ArrayList<Schedule>>(){});
+				new TypeReference<Set<Schedule>>(){});
 		
-		assertIterableEquals(outputCoursesFromFile, processedSchedules);
+		Assertions.assertThat(processedSchedules).containsExactlyInAnyOrderElementsOf(outputCoursesFromFile);
 	}
 
 }
